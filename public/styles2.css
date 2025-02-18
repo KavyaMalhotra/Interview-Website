@@ -1,0 +1,99 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f8f8;
+    color: #333;
+}
+
+/* Main Content */
+main {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Interview Page Heading */
+h2 {
+    color: #b30000;
+    font-size: 24px;
+}
+
+/* Candidate Info */
+p {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+/* Video Styling */
+video {
+    width: 100%;
+    max-width: 600px;
+    border: 3px solid #b30000;
+    border-radius: 5px;
+    margin: 20px 0;
+}
+
+/* Buttons */
+button {
+    background-color: #b30000;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 10px;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: #800000;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+
+.questions {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #ffebee; /* Light red background */
+    border: 2px solid #d32f2f; /* Dark red border */
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.questions h2 {
+    color: #b71c1c; /* Deep red */
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.questions form {
+    margin-top: 20px;
+}
+
+.questions button {
+    background: #d32f2f; /* Dark red */
+    color: white;
+    font-size: 16px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.questions button:hover {
+    background: #b71c1c; /* Even darker red */
+}

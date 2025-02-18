@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Camera Test</title>
+</head>
+<body>
+    <video id="video" autoplay playsinline></video>
+    <script>
+        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+            .then((stream) => {
+                document.getElementById("video").srcObject = stream;
+            })
+            .catch((error) => {
+                console.error("Camera Error:", error);
+                alert("Failed to access camera: " + error.message);
+            });
+    </script>
+</body>
+</html>

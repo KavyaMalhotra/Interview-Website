@@ -1,0 +1,11 @@
+
+<%- include ('partials/header2') %>
+<div class="questions">
+    <h2 id="question-text"><%= question %></h2>
+    <%- include('partials/video') %>
+    <form id="question-form" action="/next-question" method="POST" enctype="multipart/form-data">
+        <input type="file" name="video" id="video-upload" hidden>
+        <button type="submit" id="submit-btn">Next Question</button>
+    </form>
+</div>
+<%- include ('partials/footer2') %>
