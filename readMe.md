@@ -95,7 +95,7 @@ CREATE TABLE users (
     verified BOOLEAN DEFAULT FALSE,
     verification_token VARCHAR(255)
 );
-
+```
 
 ## How It Works
 1. The user starts the interview by visiting the homepage.
