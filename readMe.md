@@ -97,6 +97,36 @@ CREATE TABLE users (
 );
 ```
 
+## .env Setup
+
+Create a PostgreSQL database and run the following query to create the `users` table:
+
+```bash
+# ✅ Database Credentials
+DB_USER=postgres
+DB_HOST=localhost
+DB_NAME=//  # Replace with your database name
+DB_PASSWORD=//  # Replace with your database password
+DB_PORT=5432
+
+# ✅ Email Credentials (For Verification)
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USER=//  # Replace with your email address
+EMAIL_PASS=//  # Replace with your email password or app-specific password
+
+# ✅ Google OAuth Credentials
+GOOGLE_CLIENT_ID=//  # Replace with your Google Client ID
+GOOGLE_CLIENT_SECRET=//  # Replace with your Google Client Secret
+GOOGLE_CALLBACK_URL=http://localhost:3000/auth/google/callback
+
+# ✅ Other API Credentials
+PERSPECTIVE_API_KEY=//  # Replace with your Perspective API key if used
+
+
+```
+
+
 ## How It Works
 1. The user starts the interview by visiting the homepage.
 2. A set of predefined questions is shown to the user one by one.
