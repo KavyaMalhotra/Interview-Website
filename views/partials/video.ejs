@@ -1,9 +1,144 @@
 <main>
     <h2>Interview Session</h2>
-    <p>Click the button below to start recording your interview.</p>
+    <!-- Display current question text -->
+    <p id="question-text">Question: <%= question %></p>
+    
+    <!-- Progress bar container -->
+    <div class="progress-container">
+      <div class="red-line"></div>
+    </div>
+    
+    <!-- Video element for recording -->
     <video id="video" autoplay playsinline muted></video>
-    <button id="start-record">Start Recording</button>
-    <button id="stop-record" disabled>Stop Recording</button>
+    
+    <!-- Control buttons for recording -->
+    <div class="controls">
+      <button id="start-record">Start Recording</button>
+      <button id="stop-record" disabled>Stop Recording</button>
+      <!-- Next Question Form (initially disabled) -->
+      <form id="question-form" action="/next-question" method="POST" enctype="multipart/form-data" style="display: inline;">
+        <input type="file" name="video" id="video-upload" hidden>
+        <button type="submit" id="submit-btn" disabled>Next Question</button>
+      </form>
+    </div>
+    
+    <!-- Hidden recorded video if needed -->
     <video id="recorded-video" controls hidden></video>
     <input type="file" id="video-file" name="video" hidden>
-</main>
+  </main>
+  
+  <style>
+    main {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 15px;
+      text-align: center;
+    }
+    #question-text {
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+    }
+    .progress-container {
+      width: 100%;
+      height: 6px;
+      background-color: #ddd;
+      margin: 15px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .red-line {
+      width: 100%;
+      height: 100%;
+      background-color: red;
+      transition: width 0.1s linear;
+    }
+    video#video {
+      width: 100%;
+      border: 1px solid #ccc;
+      margin-bottom: 15px;
+    }
+    .controls {
+      margin-bottom: 20px;
+    }
+    .controls button,
+    .controls form button {
+      background-color: #b30000;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      margin: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    .controls button:hover:not(:disabled),
+    .controls form button:hover:not(:disabled) {
+      background-color: #990000;
+      transform: scale(1.05);
+    }
+    .controls button:disabled,
+    .controls form button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+  </style>
+  
+  <script>
+    // Inline script to handle UI for the progress bar and buttons
+    const startButton = document.getElementById("start-record");
+    const stopButton = document.getElementById("stop-record");
+    const nextQuestionBtn = document.getElementById("submit-btn");
+    const redLine = document.querySelector(".red-line");
+    
+    let timerInterval;
+    const totalTime = 30; // seconds per question
+    let timeLeft = totalTime;
+    
+    function startTimer() {
+      timeLeft = totalTime;
+      redLine.style.width = "100%";
+      timerInterval = setInterval(() => {
+        timeLeft -= 0.1;
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          redLine.style.width = "0%";
+          stopRecording(); // Auto-stop recording when time is up
+          // Enable the Next Question button for manual upload
+          nextQuestionBtn.disabled = false;
+          alert("Time is up! Please click 'Next Question' to continue.");
+        } else {
+          const percentage = (timeLeft / totalTime) * 100;
+          redLine.style.width = percentage + "%";
+        }
+      }, 100);
+    }
+    
+    function startRecording() {
+      console.log("Recording started.");
+      // (Actual recording logic is in script.js)
+    }
+    
+    function stopRecording() {
+      console.log("Recording stopped.");
+      // (Actual stop logic is in script.js)
+    }
+    
+    startButton.addEventListener("click", () => {
+      startRecording();
+      startTimer();
+      startButton.disabled = true;
+      stopButton.disabled = false;
+      nextQuestionBtn.disabled = true;
+    });
+    
+    stopButton.addEventListener("click", () => {
+      clearInterval(timerInterval);
+      redLine.style.width = "0%";
+      stopRecording();
+      startButton.disabled = false;
+      stopButton.disabled = true;
+      nextQuestionBtn.disabled = false;
+    });
+  </script>
+  

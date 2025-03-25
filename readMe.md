@@ -80,6 +80,23 @@ Open your browser and navigate to http://localhost:3000 to start the interview p
 ### 5. Upload a Video
 After submitting your initial details, the interview questions will be displayed one by one. For each question, upload a video response. The system will process the video, transcribe the speech, and provide a score based on keywords for the respective question.
 
+## Database Setup
+
+Create a PostgreSQL database and run the following query to create the `users` table:
+
+```sql
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    score INTEGER DEFAULT 0,
+    verified BOOLEAN DEFAULT FALSE,
+    verification_token VARCHAR(255)
+);
+
+
 ## How It Works
 1. The user starts the interview by visiting the homepage.
 2. A set of predefined questions is shown to the user one by one.

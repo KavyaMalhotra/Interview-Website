@@ -1,5 +1,31 @@
 <%- include('partials/header') %>
 
 <h1>Your total score out of 10 is <%= score %></h1>
+<div class="logout-container">
+  <form action="/logout" method="POST">
+    <button type="submit" class="logout-button">Logout</button>
+  </form>
+</div>
+
+<style>
+  .logout-container {
+    margin-top: 20px;
+    text-align: center;
+  }
+  .logout-button {
+    background-color: #b30000;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  .logout-button:hover {
+    background-color: #990000;
+    transform: scale(1.05);
+  }
+</style>
 
 <%- include('partials/footer') %>

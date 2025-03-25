@@ -1,20 +1,15 @@
 <%- include('partials/header') %>
 <main>
-    <h2>Candidate Registration</h2>
-    <form action="/submit" method="POST">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required>
-        
-        <label for="age">Age:</label>
-        <input type="number" id="age" name="age" required>
-        
-        <label for="year">College Year:</label>
-        <input type="text" id="year" name="year" required>
-        
-        <label for="cgpa">College CGPA:</label>
-        <input type="number" step="0.01" id="cgpa" name="cgpa" required>
-        
-        <button type="submit">Submit</button>
+    <h1>Welcome to the Interview Portal</h1>
+    <p>Please register or log in to continue:</p>
+    
+    <form action="/register" method="get">
+        <button type="submit">Register</button>
+    </form>
+    
+    <form action="/login" method="get">
+        <button type="submit">Login</button>
     </form>
 </main>
+
 <%- include('partials/footer') %>
