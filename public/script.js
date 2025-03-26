@@ -1,7 +1,8 @@
-const API_BASE_URL = process.env.NODE_ENV === "production"
-  ? "https://interview-website-6nl4.onrender.com"
+const API_BASE_URL = window.ENV.NODE_ENV === "production"
+  ? window.ENV.API_BASE_URL
   : "http://localhost:3000";
 
+  
 document.addEventListener("DOMContentLoaded", () => {
     console.log("✅ Script loaded successfully!");
     initializeRecording();
