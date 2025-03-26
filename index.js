@@ -13,7 +13,9 @@ import crypto from "crypto"; // To generate verification tokens
 
 const app = express();
 const PORT = 3000;
-const PYTHON_API_URL = "http://127.0.0.1:5001/process";
+const PYTHON_API_URL = process.env.NODE_ENV === "production"
+  ? "https://api-for-interview-website.onrender.com"
+  : "http://127.0.0.1:5001/process";
 const uploadFolder = "uploads/";
 
 // Ensure upload folder exists
