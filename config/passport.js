@@ -5,11 +5,17 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+// Dynamically set the callback URL based on environment
+const callbackURL = process.env.GOOGLE_CALLBACK_URL ||
+  (process.env.NODE_ENV === "production"
+    ? "https://interview-website-6nl4.onrender.com/auth/google/callback"
+    : "http://localhost:3000/auth/google/callback");
+
 // ✅ Google OAuth Strategy
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: process.env.GOOGLE_CALLBACK_URL
+    callbackURL: callbackURL
 },
 async (accessToken, refreshToken, profile, done) => {
     try {
@@ -30,9 +36,9 @@ async (accessToken, refreshToken, profile, done) => {
     }
 }));
 
-// ✅ Serialize the user into the session (Store ID instead of email)
+// ✅ Serialize the user into the session (Store email instead of full user object)
 passport.serializeUser((user, done) => {
-    done(null, user.email); // ✅ Store email instead of full user object
+    done(null, user.email);
 });
 
 // ✅ Deserialize user from session and fetch from database
@@ -41,9 +47,9 @@ passport.deserializeUser(async (email, done) => {
         const userResult = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
 
         if (userResult.rows.length > 0) {
-            done(null, userResult.rows[0]); // ✅ Return full user object
+            done(null, userResult.rows[0]);
         } else {
-            done(null, false); // ❌ User not found in DB
+            done(null, false);
         }
     } catch (err) {
         done(err, null);
@@ -51,3 +57,4 @@ passport.deserializeUser(async (email, done) => {
 });
 
 export default passport;
+// The code snippet above configures the Google OAuth strategy for Passport.js. It uses the passport-google-oauth20 package to authenticate users via Google OAuth. The code dynamically sets the callback URL based on the environment (production or development).
