@@ -1,8 +1,4 @@
-const API_BASE_URL = window.ENV.NODE_ENV === "production"
-  ? window.ENV.API_BASE_URL
-  : "http://localhost:3000";
 
-  
 document.addEventListener("DOMContentLoaded", () => {
     console.log("✅ Script loaded successfully!");
     initializeRecording();
@@ -105,7 +101,7 @@ function initializeRecording() {
         
         console.log("📤 Uploading video...");
         try {
-            const response = await fetch(`${API_BASE_URL}/next-question`, {
+            const response = await fetch("http://localhost:3000/next-question", {
                 method: "POST",
                 body: formData,
             });
