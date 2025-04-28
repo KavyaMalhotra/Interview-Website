@@ -1,30 +1,61 @@
 <%- include('partials/header') %>
 
-<h1>Your total score out of 10 is <%= score %></h1>
-<div class="logout-container">
-  <form action="/logout" method="POST">
-    <button type="submit" class="logout-button">Logout</button>
-  </form>
+<div class="result-container">
+  <h1>Your total score</h1>
+  <p class="score"><%= score %> / <%= totalQuestions %></p>
+  
+  <div class="actions">
+    <form action="/restart" method="POST">
+      <button type="submit" class="btn retake">Retake Interview</button>
+    </form>
+    <form action="/logout" method="POST">
+      <button type="submit" class="btn logout">Logout</button>
+    </form>
+  </div>
 </div>
 
 <style>
-  .logout-container {
-    margin-top: 20px;
+  .result-container {
+    max-width: 500px;
+    margin: 2rem auto;
     text-align: center;
   }
-  .logout-button {
-    background-color: #b30000;
-    color: white;
-    padding: 10px 20px;
+  .score {
+    font-size: 3rem;
+    margin: 1rem 0;
+    font-weight: bold;
+    color: #2c3e50;
+  }
+  .actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  .btn {
+    padding: 0.75rem 1.5rem;
     border: none;
     border-radius: 4px;
-    font-size: 16px;
+    font-size: 1rem;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: transform 0.2s ease;
   }
-  .logout-button:hover {
-    background-color: #990000;
+  .btn:hover {
     transform: scale(1.05);
+  }
+  .retake {
+    background-color: #007bff;
+    color: white;
+  }
+  .retake:hover {
+    background-color: #0056b3;
+  }
+  .logout {
+    background-color: #b30000;
+    color: white;
+  }
+  .logout:hover {
+    background-color: #990000;
   }
 </style>
 

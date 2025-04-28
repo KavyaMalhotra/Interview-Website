@@ -1,0 +1,10 @@
+authtoken: 2r7Be8FLTqHhMZwWjhsahCZH8sx_4hLEBoPX6MzhBcnpup5xn
+
+tunnels:
+  main-backend:
+    addr: 3000
+    proto: http
+
+  api-backend:
+    addr: 5001
+    proto: http

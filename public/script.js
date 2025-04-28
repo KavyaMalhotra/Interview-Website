@@ -90,33 +90,45 @@ function initializeRecording() {
     // Upload the recorded video to the server.
     async function uploadVideo() {
         if (recordedChunks.length === 0) {
-            console.error("❌ No recorded video found!");
-            alert("⚠ No video recorded! Please record before proceeding.");
-            return;
+          console.error("❌ No recorded video found!");
+          alert("⚠ No video recorded! Please record before proceeding.");
+          return;
         }
         const blob = new Blob(recordedChunks, { type: "video/webm" });
         const file = new File([blob], "interview-video.webm", { type: "video/webm" });
         const formData = new FormData();
         formData.append("video", file);
-        
+      
         console.log("📤 Uploading video...");
         try {
-            const response = await fetch("http://localhost:3000/next-question", {
-                method: "POST",
-                body: formData,
-            });
-            if (!response.ok) {
-                throw new Error(`Upload failed: ${response.statusText}`);
-            }
-            console.log("✅ Upload successful!");
-            stopCamera();
-            // Redirect to /questions to reload the new question and reinitialize the script.
-            window.location.href = "/questions";
+          // Tell fetch to NOT auto-follow redirects so we can inspect them
+          const response = await fetch("/next-question", {
+        method: "POST",
+        body: formData
+      });
+      
+      
+          if (response.status === 302) {
+            // We got a redirect: grab the Location header
+            const location = response.headers.get("Location");
+            console.log("↪️ Redirecting to", location);
+            window.location.href = location;
+            return;
+          }
+      
+          if (!response.ok) {
+            throw new Error(`Upload failed: ${response.statusText}`);
+          }
+      
+          // No redirect → they must have rendered the next question
+          console.log("✅ Upload successful, loading next question");
+          window.location.href = "/questions";
+      
         } catch (error) {
-            console.error("❌ Upload error:", error);
-            alert("⚠ Video upload failed! Please try again.");
+          console.error("❌ Upload error:", error);
+          alert("⚠ Video upload failed! Please try again.");
         }
-    }
+      }
 
     function stopCamera() {
         const stream = videoElement.srcObject;

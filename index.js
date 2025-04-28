@@ -208,6 +208,13 @@ app.get(
     if (!req.session.user) {
       return res.redirect("/login");
     }
+  
+    // Check if the currentQuestionIndex is 9, then redirect to /result
+    if (req.session.currentQuestionIndex === 9) {
+      return res.redirect("/result");
+    }
+  
+    // Render the questions page if the index is not 9
     res.render("questions", { question: questions[req.session.currentQuestionIndex], user: req.session.user });
   });
   
@@ -282,40 +289,80 @@ app.post("/logout", (req, res) => {
 });
 
 // Interview functionality route
+// in index.js (or wherever your routes live)
 app.post("/next-question", upload.single("video"), async (req, res) => {
+  // ▶️ FIRST: if we've already hit 10 questions, skip the upload check entirely
+  if (req.session.currentQuestionIndex >= 10) {
+    // optionally update DB here…
+    if (req.session.user?.id) {
+      await pool.query(
+        "UPDATE users SET score = $1 WHERE id = $2",
+        [req.session.totalScore, req.session.user.id]
+      );
+    }
+    return res.redirect("/result");
+  }
+
+  // ▶️ THEN: normal flow—require a video
   if (!req.file) {
     console.error("❌ No video uploaded!");
     return res.status(400).send("❌ No video uploaded!");
   }
+
   try {
     console.log(`Processing video for Question ${req.session.currentQuestionIndex + 1}...`);
+    // … your existing processing logic …
     const form = new FormData();
     form.append("video", fs.createReadStream(req.file.path));
-    form.append("questionIndex", req.session.currentQuestionIndex.toString());
+    form.append("questionIndex", String(req.session.currentQuestionIndex));
     const response = await axios.post(PYTHON_API_URL, form, { headers: form.getHeaders() });
-    let score = response.data.score;
-    req.session.totalScore += score;
-    fs.unlink(req.file.path, (err) => {
-      if (err) console.error(`❌ Failed to delete video file: ${err.message}`);
-      else console.log(`🗑️ Deleted: ${req.file.path}`);
-    });
+    req.session.totalScore += response.data.score;
+
+    fs.unlink(req.file.path, () => {});
+
     req.session.currentQuestionIndex++;
-    if (req.session.currentQuestionIndex < questions.length) {
-      return res.render("questions", { question: questions[req.session.currentQuestionIndex], user: req.session.user });
+
+    // ▶️ Check **again** after increment—if 10 now, go to result
+    if (req.session.currentQuestionIndex >= 10) {
+      if (req.session.user?.id) {
+        await pool.query(
+          "UPDATE users SET score = $1 WHERE id = $2",
+          [req.session.totalScore, req.session.user.id]
+        );
+      }
+      return res.redirect("/result");
     }
-    // Update user's score in the database if logged in
-    if (req.session.user && req.session.user.id) {
-      await pool.query("UPDATE users SET score = $1 WHERE id = $2", [req.session.totalScore, req.session.user.id]);
-    }
-    return res.render("result", { score: req.session.totalScore, user: req.session.user });
+
+    // ▶️ Otherwise render next question
+    return res.render("questions", {
+      question: questions[req.session.currentQuestionIndex],
+      user: req.session.user,
+    });
+
   } catch (err) {
     console.error("❌ Python API Error:", err.message || err);
-    fs.unlink(req.file.path, (unlinkErr) => {
-      if (unlinkErr) console.error(`❌ Failed to delete video file after error: ${unlinkErr.message}`);
-    });
+    fs.unlink(req.file.path, () => {});
     return res.status(500).send("⚠ Error processing video. Please try again.");
   }
 });
+
+// New: GET /result route to render your result.ejs
+app.get("/result", (req, res) => {
+  res.render("result", {
+    score: req.session.totalScore,
+    totalQuestions: 10,
+    user: req.session.user,
+  });
+});
+
+
+
+app.post("/restart", (req, res) => {
+  req.session.currentQuestionIndex = 0;
+  req.session.totalScore = 0;
+  res.redirect("/questions"); // or wherever your first question lives
+});
+
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
