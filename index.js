@@ -55,7 +55,7 @@ app.set("views", "views");
 // Session middleware
 app.use(
   session({
-    secret: "interview-secret-key",
+    secret: //your secret key,
     resave: false,
     saveUninitialized: false,
     cookie: { secure: false }
